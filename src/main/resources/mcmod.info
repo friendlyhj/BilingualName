@@ -1,0 +1,15 @@
+[
+{
+  "modid": "bilingualname",
+  "name": "bilingual Name",
+  "description": "Show bilingual name for items",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["youyihj"],
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
