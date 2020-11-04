@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.Locale;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -28,7 +29,7 @@ public class TooltipEventHandler {
         List<String> tooltip = event.getToolTip();
         String key = Util.tryFindingKey(EN_US, stack);
         if (key.isEmpty()) return;
-        String localizedName = EN_US.formatMessage(key, new Object[0]);
+        String localizedName = TextFormatting.GREEN + EN_US.formatMessage(key, new Object[0]);
         tooltip.add(localizedName);
     }
 }
