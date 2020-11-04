@@ -26,7 +26,9 @@ public class TooltipEventHandler {
         if (Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getJavaLocale().equals(java.util.Locale.US)) return;
         ItemStack stack = event.getItemStack();
         List<String> tooltip = event.getToolTip();
-        String localizedName = EN_US.formatMessage(stack.getUnlocalizedName() + ".name", new Object[0]);
+        String key = Util.tryFindingKey(EN_US, stack);
+        if (key.isEmpty()) return;
+        String localizedName = EN_US.formatMessage(key, new Object[0]);
         tooltip.add(localizedName);
     }
 }
