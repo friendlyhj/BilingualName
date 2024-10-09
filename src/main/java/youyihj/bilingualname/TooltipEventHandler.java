@@ -2,20 +2,24 @@ package youyihj.bilingualname;
 
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.Locale;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author youyihj
  */
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class TooltipEventHandler {
     public static final Locale EN_US = new Locale();
 
@@ -23,14 +27,18 @@ public class TooltipEventHandler {
         EN_US.loadLocaleDataFiles(Minecraft.getMinecraft().getResourceManager(), Lists.newArrayList("en_us"));
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
         if (Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getJavaLocale().equals(java.util.Locale.US)) return;
-        ItemStack stack = event.getItemStack();
-        List<String> tooltip = event.getToolTip();
-        String key = Util.tryFindingKey(EN_US, stack);
-        if (key.isEmpty()) return;
-        String localizedName = TextFormatting.GREEN + EN_US.formatMessage(key, new Object[0]);
-        tooltip.add(localizedName);
+        Locale prevLocale = I18n.i18nLocale;
+        Map<String, String> prevLanguageList = LanguageMap.getInstance().languageList;
+        I18n.i18nLocale = EN_US;
+        LanguageMap.getInstance().languageList = EN_US.properties;
+        ItemStack item = event.getItemStack();
+        if (!item.hasDisplayName()) {
+            event.getToolTip().add(1, TextFormatting.GREEN + TextFormatting.getTextWithoutFormattingCodes(item.getDisplayName()));
+        }
+        I18n.i18nLocale = prevLocale;
+        LanguageMap.getInstance().languageList = prevLanguageList;
     }
 }
