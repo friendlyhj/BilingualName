@@ -28,21 +28,21 @@ public class TooltipEventHandler {
     public static final Locale EN_US = new Locale();
 
     static {
-        load();
-        IResourceManager iResourceManager = Minecraft.getMinecraft().getResourceManager();
-        if (iResourceManager instanceof IReloadableResourceManager){
-            ((IReloadableResourceManager)iResourceManager).registerReloadListener(
-                    (ISelectiveResourceReloadListener) (iResourceManager1, type) -> {
+        IResourceManager irm = Minecraft.getMinecraft().getResourceManager();
+        load(irm);
+        if (irm instanceof IReloadableResourceManager){
+            ((IReloadableResourceManager)irm).registerReloadListener(
+                    (ISelectiveResourceReloadListener) (rm, type) -> {
                         if (type.test(VanillaResourceType.LANGUAGES)) {
-                            load();
+                            load(rm);
                         }
                     }
             );
         }
     }
 
-    private static void load(){
-        EN_US.loadLocaleDataFiles(Minecraft.getMinecraft().getResourceManager(), Lists.newArrayList("en_us"));
+    private static void load(IResourceManager irm){
+        EN_US.loadLocaleDataFiles(irm, Lists.newArrayList("en_us"));
     }
 
     @SubscribeEvent
