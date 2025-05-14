@@ -3,8 +3,12 @@ package youyihj.bilingualname;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.Locale;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.resource.ISelectiveResourceReloadListener;
+import net.minecraftforge.client.resource.VanillaResourceType;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -24,6 +28,20 @@ public class TooltipEventHandler {
     public static final Locale EN_US = new Locale();
 
     static {
+        load();
+        IResourceManager iResourceManager = Minecraft.getMinecraft().getResourceManager();
+        if (iResourceManager instanceof IReloadableResourceManager){
+            ((IReloadableResourceManager)iResourceManager).registerReloadListener(
+                    (ISelectiveResourceReloadListener) (iResourceManager1, type) -> {
+                        if (type.test(VanillaResourceType.LANGUAGES)) {
+                            load();
+                        }
+                    }
+            );
+        }
+    }
+
+    private static void load(){
         EN_US.loadLocaleDataFiles(Minecraft.getMinecraft().getResourceManager(), Lists.newArrayList("en_us"));
     }
 
